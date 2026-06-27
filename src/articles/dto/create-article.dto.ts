@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Status } from '@prisma/client';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateArticleDto {
   @IsString()
@@ -9,17 +16,21 @@ export class CreateArticleDto {
   @IsNotEmpty()
   content!: string;
 
+  @IsString()
+  @IsNotEmpty()
+  slug!: string;
+
   @IsOptional()
   image_url!: string;
 
+  @IsEnum(Status)
+  status!: Status;
+
   @IsString()
   @IsNotEmpty()
-  status!: string;
-
-  @IsUUID()
   userId!: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  catego
+  categoryId!: number;
 }
