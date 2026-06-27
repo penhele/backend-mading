@@ -28,33 +28,36 @@ model User {
   name     String
   role     ROLE
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Article   Article[]
+  articles Article[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
-  id   Int    @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String @unique
-  slug String
+  slug String @unique
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Article   Article[]
+  articles Article[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Article {
   id        String  @id @default(ulid())
   title     String  @unique
-  content   String
+  slug      String  @unique
+  content   String  @db.Text
   image_url String?
   status    Status
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  categoryName String
-  category     Category @relation(fields: [categoryName], references: [name], onDelete: Cascade)
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [name], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
