@@ -22,11 +22,11 @@ enum Status {
 }
 
 model User {
-  id       String @id @default(ulid())
+  id       String @id @default(uuid())
   username String @unique
   password String
   name     String
-  role     ROLE
+  role     ROLE?  @default(USER)
 
   articles Article[]
 
@@ -46,7 +46,7 @@ model Category {
 }
 
 model Article {
-  id        String  @id @default(ulid())
+  id        String  @id @default(uuid())
   title     String  @unique
   slug      String  @unique
   content   String  @db.Text
