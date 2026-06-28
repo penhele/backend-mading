@@ -14,7 +14,12 @@ export class ArticlesService {
   }
 
   async findAll() {
-    return this.prisma.article.findMany();
+    return this.prisma.article.findMany({
+      include: {
+        category: true,
+        user: true,
+      },
+    });
   }
 
   async update(id: string, dto: UpdateArticleDto) {
