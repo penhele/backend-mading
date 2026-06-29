@@ -25,6 +25,10 @@ export class ArticlesService {
   async findOne(id: string) {
     return this.prisma.article.findUnique({
       where: { id },
+      include: {
+        category: true,
+        user: true,
+      },
     });
   }
 
