@@ -18,7 +18,7 @@ import { ROLE } from '@prisma/client';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticlesService) {}
+  constructor(private readonly articlesService: ArticlesService) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -32,10 +32,11 @@ export class ArticlesController {
     return this.articlesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.articlesService.findOne(id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.articlesService.findOne(slug);
   }
+
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)

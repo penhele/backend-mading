@@ -22,9 +22,9 @@ export class ArticlesService {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(slug: string) {
     return this.prisma.article.findUnique({
-      where: { id },
+      where: { slug },
       include: {
         category: true,
         user: true,
