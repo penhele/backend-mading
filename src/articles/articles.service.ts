@@ -22,6 +22,12 @@ export class ArticlesService {
     });
   }
 
+  async findOne(id: string) {
+    return this.prisma.article.findUnique({
+      where: { id },
+    });
+  }
+
   async update(id: string, dto: UpdateArticleDto) {
     return this.prisma.article.update({
       data: dto,
