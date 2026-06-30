@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -15,6 +17,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ROLE } from '@prisma/client';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('articles')
 export class ArticlesController {
@@ -23,8 +26,9 @@ export class ArticlesController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN)
-  create(@Body() createArticleDto: CreateArticleDto) {
-    return this.articlesService.create(createArticleDto);
+  @UseInterceptors(FileInterceptor('image'))
+  create(@Body() createArticleDto: CreateArticleDto, @UploadedFile() file?: Express.Multer.File) {
+    return this.articlesService.create(createArticleDto, file);
   }
 
   @Get()
