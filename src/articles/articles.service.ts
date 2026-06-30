@@ -14,11 +14,22 @@ export class ArticlesService {
     if (file) {
       const upload = await this.cloudinary.uploadFile(file)
       imageUrl = upload.secure_url
+    } else if (dto.image_url) {
+      imageUrl = dto.image_url;
+    } else if ((dto as any).imageUrl) {
+      imageUrl = (dto as any).imageUrl;
     }
 
-    
     return this.prisma.article.create({
-      data: {...dto, image_url: imageUrl},
+      data: {
+        title: dto.title,
+        slug: dto.slug,
+        content: dto.content,
+        status: dto.status,
+        userId: dto.userId,
+        categoryId: Number(dto.categoryId),
+        image_url: imageUrl,
+      },
     });
   }
 
@@ -42,8 +53,22 @@ export class ArticlesService {
   }
 
   async update(id: string, dto: UpdateArticleDto) {
+    const data: any = {};
+    if (dto.title !== undefined) data.title = dto.title;
+    if (dto.slug !== undefined) data.slug = dto.slug;
+    if (dto.content !== undefined) data.content = dto.content;
+    if (dto.status !== undefined) data.status = dto.status;
+    if (dto.userId !== undefined) data.userId = dto.userId;
+    if (dto.categoryId !== undefined) data.categoryId = Number(dto.categoryId);
+
+    if (dto.image_url !== undefined) {
+      data.image_url = dto.image_url;
+    } else if ((dto as any).imageUrl !== undefined) {
+      data.image_url = (dto as any).imageUrl;
+    }
+
     return this.prisma.article.update({
-      data: dto,
+      data,
       where: { id },
     });
   }

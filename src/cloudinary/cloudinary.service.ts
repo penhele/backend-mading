@@ -11,9 +11,13 @@ export class CloudinaryService {
         const upload = cloudinary.uploader.upload_stream(
           { folder: 'mading-online' },
           (error, result) => {
+            if (error) {
+              return reject(error);
+            }
             if (!result) {
-                return reject(new Error('Cloudinary upload returned no result.'));
-              }
+              return reject(new Error('Cloudinary upload returned no result.'));
+            }
+            resolve(result);
           },
         );
         
