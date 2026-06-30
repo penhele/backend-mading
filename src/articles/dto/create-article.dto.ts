@@ -21,7 +21,7 @@ export class CreateArticleDto {
   slug!: string;
 
   @IsOptional()
-  image_url!: string;
+  imageUrl!: string;
 
   @IsEnum(Status)
   status!: Status;

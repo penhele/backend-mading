@@ -50,7 +50,7 @@ model Article {
   title     String  @unique
   slug      String  @unique
   content   String  @db.Text
-  image_url String?
+  imageUrl String?
   status    Status
 
   userId String

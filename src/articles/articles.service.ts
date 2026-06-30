@@ -9,22 +9,18 @@ export class ArticlesService {
   constructor(private prisma: PrismaService, private cloudinary: CloudinaryService) { }
 
   async create(dto: CreateArticleDto, file?: Express.Multer.File) {
-    let imageUrl: string | null = null;
+    let imageUrl = dto.imageUrl;
 
     if (file) {
       const upload = await this.cloudinary.uploadFile(file)
       imageUrl = upload.secure_url
-    } else if (dto.image_url) {
-      imageUrl = dto.image_url;
-    } else if ((dto as any).imageUrl) {
-      imageUrl = (dto as any).imageUrl;
     }
 
     return this.prisma.article.create({
       data: {
         ...dto,
         categoryId: Number(dto.categoryId),
-        image_url: imageUrl,
+        imageUrl,
       },
     });
   }
@@ -49,19 +45,8 @@ export class ArticlesService {
   }
 
   async update(id: string, dto: UpdateArticleDto) {
-    const data: any = {};
-    if (dto.title !== undefined) data.title = dto.title;
-    if (dto.slug !== undefined) data.slug = dto.slug;
-    if (dto.content !== undefined) data.content = dto.content;
-    if (dto.status !== undefined) data.status = dto.status;
-    if (dto.userId !== undefined) data.userId = dto.userId;
+    const data: any = { ...dto };
     if (dto.categoryId !== undefined) data.categoryId = Number(dto.categoryId);
-
-    if (dto.image_url !== undefined) {
-      data.image_url = dto.image_url;
-    } else if ((dto as any).imageUrl !== undefined) {
-      data.image_url = (dto as any).imageUrl;
-    }
 
     return this.prisma.article.update({
       data,
