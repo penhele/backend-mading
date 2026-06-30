@@ -25,6 +25,19 @@ export class CategoriesService {
     });
   }
 
+  async findOne(id: number) {
+    return this.prisma.category.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            articles: true,
+          },
+        },
+      },
+    });
+  }
+
   update(id: number, dto: UpdateCategoryDto) {
     return this.prisma.category.update({
       data: dto,
