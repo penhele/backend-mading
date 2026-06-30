@@ -6,7 +6,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class ArticlesService {
-  constructor(private prisma: PrismaService, private cloudinary: CloudinaryService) {}
+  constructor(private prisma: PrismaService, private cloudinary: CloudinaryService) { }
 
   async create(dto: CreateArticleDto, file?: Express.Multer.File) {
     let imageUrl: string | null = null;
@@ -22,11 +22,7 @@ export class ArticlesService {
 
     return this.prisma.article.create({
       data: {
-        title: dto.title,
-        slug: dto.slug,
-        content: dto.content,
-        status: dto.status,
-        userId: dto.userId,
+        ...dto,
         categoryId: Number(dto.categoryId),
         image_url: imageUrl,
       },
